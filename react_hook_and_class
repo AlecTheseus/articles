@@ -1,0 +1,41 @@
+Pros and cons about react hook / class
+
+Cons:
+
+# Dependencies in useCallback
+As we know, there are clear and limited area to be rerendered in React class, which is inside render function.  While in react function component, rerender will run throughout the whole function.
+To avoid the unnecessary function rerendering, we may use useCallback hook to cache the function, but we still need to pass the dependencies, even including some other functions.
+e.g.
+
+const myFunc = useCallback(() => {
+      c(a, b);
+}, [a, b, c]);
+
+This contains an ugly and annoying tail, besides, people are easy to make mistakes when editing it. While in React class component, we do not need to worry about the dependencies since the functions will not be rerendered.
+
+
+# Synchronisation 
+// todo
+
+# State and rerender
+In React hooks, states works individually, while in React class, state can be assigned in one object or function, which is much more flexible. The difference the time of rerendering.
+e.g. If you need to set two varibles: age and gender
+In hooks, it rerender two times:
+setAge(myAge);
+setGender(myGender); 
+while in class, it rerender only one time:
+this.setState({ age, gender });
+
+In hooks, wee may consider combine these two states into one object,
+e.g.
+const [info, setInfo] = useState({ age: myAge, gender: myGender });
+But it is still not flexible as setState.
+
+# Return result
+// todo
+
+# Decorator 
+// todo
+
+# Readable 
+// todo
