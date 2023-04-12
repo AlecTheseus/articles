@@ -40,4 +40,4 @@ But it is still not flexible as setState.
 # Readable 
 // todo
 
-# References locking
+# Stale State
