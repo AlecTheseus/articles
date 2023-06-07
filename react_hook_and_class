@@ -52,14 +52,97 @@ To solve this, we may need to wrap them with some extra works, including useRef/
 # Abstract: Combine VS Inherit
 Think about how we make abstract component in react, there are some samples.
 
-1. Inherit: Wrapping component (Both Class & Hooks Works)
+1. Inherit: Wrapping component (Both Work in Class & Hooks)
+const injectState = ({ initValue }) => (WrappedComponent) => {
+  return class extends React.PureComponent {
+    state = { value: initValue };
+    setValue = () => {
+      this.setState({ value: this.state.value + 1 });
+    };
+    render() {
+      const { value } = this.state;
+      const { setValue } = this;
+      const Dom = <View>{value}</View>;
+      return (
+        <WrappedComponent
+          {...this.props}
+          $inj={{ value, setValue, Dom }
+        />
+      );
+    }
+  };
+};
 
-2. Inherit: Passing params to children (Both Class & Hooks Works)
+class DD extends React.Component {
+  render() {
+    const { $inj } = this.props;
+    const { value, setValue, Dom } = $inj;
+    return (
+      <View>
+        Decorator
+        {Dom}
+        <View>{value}</View>
+        <Button onClick={setValue}> ADD 1</Button>
+        =========================
+      </View>
+    );
+  }
+}
+
+const WrappedComponent = injectState({ initValue: 2 })(DD)
+
+2. Inherit: Passing params to children (Both Work in Class & Hooks)
+
+const PP = ({ children }) => {
+  const [value, setValue] = useState(1);
+  const Dom = <View>{value}</View>;
+  return children({ value, setValue, Dom });
+};
+
+const CC = () => {
+  return (
+    <PP>
+      {({ value, setValue, Dom }) => (
+        <View>
+          Receive props from children
+          {Dom}
+          <View>{value}</View>
+          <Button onClick={() => setValue(value + 1)}> ADD 1</Button>
+          =========================
+        </View>
+      )}
+    </PP>
+  );
+};
 
 3. Inherit: Decorator (Class Only)
+Decorators can be used before Class or functions in Class.
+
+@injectState({ initValue: 2 })
+class DD extends React.Component {
+  @anotherDecorator
+  myFunction = () => {}
+  render() { ...
 
 4. Combine: custom hooks (Hooks Only)
+const useMyHook = () => {
+  const [value, setValue] = useState(1);
+  const Dom = <View>{value}</View>;
+  return [value, setValue, Dom];
+};
 
+const EE = () => {
+  const [value, setValue, Dom] = useMyHook();
+  return (
+    <View>
+      Custom Hook
+      {Dom}
+      <View>{value}</View>
+      <Button onClick={() => setValue(value + 1)}> ADD 1</Button>
+      =========================
+    </View>
+  );
+};
 
 
 
