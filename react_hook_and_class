@@ -1,6 +1,6 @@
 Pros and cons about react hook / class
 
-Cons:
+##Cons:
 
 # Dependencies in useCallback
 As we know, there are clear and limited area to be rerendered in React class, which is inside render function.  While in react function component, rerender will run throughout the whole function.
@@ -29,7 +29,7 @@ this.setState({ age, gender });
 In hooks, wee may consider combine these two states into one object,
 e.g.
 const [info, setInfo] = useState({ age: myAge, gender: myGender });
-But it is still not flexible as setState.
+It is still not flexible or convenient as setState, although we can combine them in some way.
 
 # Return result
 // todo
@@ -40,4 +40,30 @@ But it is still not flexible as setState.
 # Readable 
 // todo
 
+# Unstable reference
+The functions inside a function component will be rerendered every time if there were no useCallback/useRef wrapped, resulting unstable reference of this function. This will be a problem when we do need a stable reference, such as in debounce, throttle and Pub & Sub, a deadly disfunction will happen.
+To solve this, we may need to wrap them with some extra works, including useRef/useCallback. Eg. lodash/useThrottle. That works but disgusting. 
+
 # Stale State
+
+
+## Pros
+
+# Abstract: Combine VS Inherit
+Think about how we make abstract component in react, there are some samples.
+
+1. Inherit: Wrapping component (Both Class & Hooks Works)
+
+2. Inherit: Passing params to children (Both Class & Hooks Works)
+
+3. Inherit: Decorator (Class Only)
+
+4. Combine: custom hooks (Hooks Only)
+
+
+
+
+
+
+
+
